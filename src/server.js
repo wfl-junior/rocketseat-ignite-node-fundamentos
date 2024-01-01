@@ -7,7 +7,7 @@ const server = http.createServer((request, response) => {
   response.setHeader("Content-Type", "application/json; charset=utf-8");
 
   if (method === "GET" && url === "/users") {
-    return response.end(JSON.stringify(users));
+    return response.writeHead(200).end(JSON.stringify(users));
   }
 
   if (method === "POST" && url === "/users") {
@@ -18,12 +18,10 @@ const server = http.createServer((request, response) => {
     };
 
     users.push(newUser);
-    response.statusCode = 201;
-    return response.end(JSON.stringify(newUser));
+    return response.writeHead(201).end(JSON.stringify(newUser));
   }
 
-  response.statusCode = 405;
-  return response.end(JSON.stringify({ error: "Method not allowed" }));
+  return response.writeHead(404).end();
 });
 
 const port = 3333;
