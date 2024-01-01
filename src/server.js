@@ -18,7 +18,7 @@ const server = http.createServer(async (request, response) => {
 
     if (!matches) continue;
 
-    request.params = matches.groups ?? {};
+    request.params = { ...matches.groups };
     return route.handler(request, response);
   }
 

@@ -16,13 +16,11 @@ export const routes = [
     method: "POST",
     path: "/users",
     handler: async (request, response) => {
-      const newUser = {
-        id: crypto.randomUUID(),
+      const newUser = await database.insert("users", {
         name: request.body.name,
         email: request.body.email,
-      };
+      });
 
-      database.insert("users", newUser);
       return response.writeHead(201).end(JSON.stringify(newUser));
     },
   },
@@ -30,7 +28,7 @@ export const routes = [
     method: "DELETE",
     path: "/users/:id",
     handler: async (request, response) => {
-      console.log(request.params);
+      await database.delete("users", request.params.id);
       return response.writeHead(204).end();
     },
   },

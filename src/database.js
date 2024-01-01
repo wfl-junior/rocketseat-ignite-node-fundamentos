@@ -24,7 +24,18 @@ export class Database {
       this.#database[table] = [];
     }
 
+    data.id ??= crypto.randomUUID();
     this.#database[table].push(data);
     await this.#persist();
+    return data;
+  }
+
+  async delete(table, id) {
+    const index = this.#database[table].findIndex(row => row.id === id);
+
+    if (index >= 0) {
+      this.#database[table].splice(index, 1);
+      await this.#persist();
+    }
   }
 }
