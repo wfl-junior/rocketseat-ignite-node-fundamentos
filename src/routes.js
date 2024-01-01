@@ -26,4 +26,12 @@ export const routes = [
       return response.writeHead(201).end(JSON.stringify(newUser));
     },
   },
+  {
+    method: "DELETE",
+    path: "/users/:id",
+    handler: async (request, response) => {
+      console.log(request.params);
+      return response.writeHead(204).end();
+    },
+  },
 ];
