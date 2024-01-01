@@ -10,6 +10,6 @@ export function buildRoutePath(path) {
     "(?<$1>[a-zA-Z0-9\\-_]+)",
   );
 
-  const pathRegex = new RegExp(`^${pathWithParams}`);
+  const pathRegex = new RegExp(`^${pathWithParams}$`);
   return pathRegex;
 }

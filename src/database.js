@@ -15,8 +15,25 @@ export class Database {
     await fs.writeFile(databasePath, JSON.stringify(this.#database, null, 2));
   }
 
-  select(table) {
-    return this.#database[table] ?? [];
+  select(table, search) {
+    const data = this.#database[table];
+
+    if (!data) {
+      return [];
+    }
+
+    if (search) {
+      return data.filter(entity => {
+        return Object.entries(search).some(([key, value]) => {
+          return entity[key]
+            .toString()
+            .toLowerCase()
+            .includes(value.toString().toLowerCase());
+        });
+      });
+    }
+
+    return data;
   }
 
   async insert(table, data) {

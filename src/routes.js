@@ -7,9 +7,17 @@ export const routes = [
     method: "GET",
     path: "/users",
     handler: async (request, response) => {
-      return response
-        .writeHead(200)
-        .end(JSON.stringify(database.select("users")));
+      let search;
+
+      if (request.query.search) {
+        search = {
+          name: request.query.search,
+          email: request.query.search,
+        };
+      }
+
+      const users = database.select("users", search);
+      return response.writeHead(200).end(JSON.stringify(users));
     },
   },
   {
