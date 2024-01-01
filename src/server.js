@@ -1,14 +1,17 @@
 import http from "node:http";
+import { Database } from "./database.js";
 import { json } from "./middlewares/json.js";
 
-const users = [];
+const database = new Database();
 
 const server = http.createServer(async (request, response) => {
   const { method, url } = request;
   await json(request, response);
 
   if (method === "GET" && url === "/users") {
-    return response.writeHead(200).end(JSON.stringify(users));
+    return response
+      .writeHead(200)
+      .end(JSON.stringify(database.select("users")));
   }
 
   if (method === "POST" && url === "/users") {
@@ -18,7 +21,7 @@ const server = http.createServer(async (request, response) => {
       email: request.body.email,
     };
 
-    users.push(newUser);
+    database.insert("users", newUser);
     return response.writeHead(201).end(JSON.stringify(newUser));
   }
 
