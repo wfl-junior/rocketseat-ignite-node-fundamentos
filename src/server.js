@@ -1,28 +1,15 @@
 import http from "node:http";
-import { Database } from "./database.js";
 import { json } from "./middlewares/json.js";
-
-const database = new Database();
+import { routes } from "./routes.js";
 
 const server = http.createServer(async (request, response) => {
   const { method, url } = request;
   await json(request, response);
 
-  if (method === "GET" && url === "/users") {
-    return response
-      .writeHead(200)
-      .end(JSON.stringify(database.select("users")));
-  }
-
-  if (method === "POST" && url === "/users") {
-    const newUser = {
-      id: crypto.randomUUID(),
-      name: request.body.name,
-      email: request.body.email,
-    };
-
-    database.insert("users", newUser);
-    return response.writeHead(201).end(JSON.stringify(newUser));
+  for (const route of routes) {
+    if (route.method === method && route.path === url) {
+      return route.handler(request, response);
+    }
   }
 
   return response.writeHead(404).end();
