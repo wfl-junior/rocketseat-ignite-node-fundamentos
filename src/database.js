@@ -30,8 +30,20 @@ export class Database {
     return data;
   }
 
+  async update(table, id, data) {
+    const entity = this.#database[table].find(entity => entity.id === id);
+
+    if (!entity) {
+      return null;
+    }
+
+    Object.assign(entity, data);
+    await this.#persist();
+    return entity;
+  }
+
   async delete(table, id) {
-    const index = this.#database[table].findIndex(row => row.id === id);
+    const index = this.#database[table].findIndex(entity => entity.id === id);
 
     if (index >= 0) {
       this.#database[table].splice(index, 1);

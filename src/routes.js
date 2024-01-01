@@ -25,6 +25,18 @@ export const routes = [
     },
   },
   {
+    method: "PUT",
+    path: "/users/:id",
+    handler: async (request, response) => {
+      const updatedUser = await database.update("users", request.params.id, {
+        name: request.body.name,
+        email: request.body.email,
+      });
+
+      return response.writeHead(200).end(JSON.stringify(updatedUser));
+    },
+  },
+  {
     method: "DELETE",
     path: "/users/:id",
     handler: async (request, response) => {
